@@ -4,6 +4,7 @@ import static org.fest.assertions.api.Assertions.assertThat;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 
 import io.github.kongeor.demo.lambda.Worm.Team;
 
@@ -55,5 +56,45 @@ public class WormsManagerTest {
 		manager.sortByNameAndLife();
 		assertThat(manager.getWorms()).isEqualTo(Arrays.asList(w3, w2, w4, w1, w5));
 	}
+	
+	@Test
+	public void testGetTotalLifeForTeam() {
+		assertThat(manager.getTotalLifeFor(Team.BLUE)).isEqualTo(150);
+	}
+	
+	@Test
+	public void testGetFirstDeadWorm() {
+		assertThat(manager.getFirstDeadWorm()).isEqualTo(null);
+		Worm dead = new Worm("Dead", Team.RED);
+		dead.setLife(0);
+		manager.register(dead);
+		assertThat(manager.getFirstDeadWorm()).isEqualTo(dead);
+	}
+	
+	@Test
+	public void testGetMostLivelyWorm() {
+		assertThat(manager.getMostLivelyWorm()).isEqualTo(w1);
+	}
+	
+	@Test
+	public void testCommaSeparatedNames() {
+		assertThat(manager.getCommaSeparatedNames()).isEqualTo("Chuck, Arnold, Arnold, Arnold, John");
+	}
+	
+	@Test
+	public void testUniqueCommaSeperatedNames() {
+		String result = manager.getUniqueCommaSeparatedNames();
+		assertThat(result).containsOnlyOnce("Chuck");
+		assertThat(result).containsOnlyOnce("Arnold");
+		assertThat(result).containsOnlyOnce("John");
+		assertThat(result).hasSize(19); // 15 (names) + 2 (comma) + 2 (spaces)
+	}
 
+	@Test
+	public void testGetByTeams() {
+		Map<Team, List<Worm>> teams = manager.getByTeams();
+		assertThat(teams.get(Team.BLUE)).contains(w1, w2);
+		assertThat(teams.get(Team.RED)).contains(w3, w5);
+		assertThat(teams.get(Team.GREEN)).contains(w4);
+	}
 }

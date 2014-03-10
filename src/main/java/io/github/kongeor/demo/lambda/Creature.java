@@ -4,6 +4,6 @@ import java.awt.Point;
 
 public interface Creature {
 	
-	public void move(Map map, Point... points);
+	public void move(WorldMap map, Point... points);
 
 }

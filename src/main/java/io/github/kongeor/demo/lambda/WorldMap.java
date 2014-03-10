@@ -1,5 +1,5 @@
 package io.github.kongeor.demo.lambda;
 
-public class Map {
+public class WorldMap {
 
 }
